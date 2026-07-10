@@ -1,0 +1,27 @@
+system:
+  n_state: 4
+  n_bs: 9
+  n_ue: 9
+  n_ris: 61
+  seed: 0
+
+learning:
+  batch_size: 32
+  epochs: 300
+  lr: 0.001
+  weight_decay: 0.0001
+  val_every: 10
+  dropout: 0.00
+  hidden_dim: 256
+
+evaluation:
+  k_list: [1, 5, 10, 15, 20]
+  monitor_k: 1
+
+pca:
+  min_gap_db: -20.0
+  n_components: 639
+
+augmentation:
+  add_coord_jitter: False
+  coord_jitter_sigma: 0.015
