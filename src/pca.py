@@ -5,7 +5,7 @@ def fit_pca_decoder_targets(
     label_train,
     label_val,
     label_test,
-    n_components,
+    rank_r,
     min_gap_db,
 ):
     # fit PCA on the training scaled-gap matrix
@@ -24,8 +24,8 @@ def fit_pca_decoder_targets(
     ratio = var / np.maximum(var.sum(), 1e-12)
     cum = np.cumsum(ratio)
 
-    c_components = min(n_components, Vt.shape[0])
-    components = Vt[:c_components+1].astype(np.float32)   # (r, N_cfg), this is V_r^T
+    r = min(rank_r, Vt.shape[0])
+    components = Vt[:r].astype(np.float32) 
 
     def project(scaled_gap):
         centered = scaled_gap - mean_scaled_gap[None, :]

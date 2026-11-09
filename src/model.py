@@ -4,13 +4,7 @@ from torch import nn
 
 
 class PCADecoderMLP(nn.Module):
-    """
-    MLP encoder + fixed PCA decoder.
-
-    forward(x) returns:
-        pred_coeff       : (B, r)        — predicted PCA coefficients
-        pred_scaled_gap  : (B, N_cfg)    — reconstructed scaled gap
-    """
+ 
     def __init__(
         self,
         input_dim,
@@ -24,7 +18,7 @@ class PCADecoderMLP(nn.Module):
         mean_scaled_gap = np.asarray(mean_scaled_gap, dtype=np.float32)
         components = np.asarray(components, dtype=np.float32)
 
-        self.n_components = components.shape[0]
+        self.rank_r = components.shape[0]
         self.n_action = components.shape[1]
 
         # Fixed PCA decoder offset and basis (not trainable, follows .to(device)).
@@ -50,10 +44,9 @@ class PCADecoderMLP(nn.Module):
             nn.ReLU(),
             nn.Dropout(dropout),
 
-            nn.Linear(hidden_dim, self.n_components),
+            nn.Linear(hidden_dim, self.rank_r),
         )
 
-        # warm start
         nn.init.zeros_(self.net[-1].weight)
         nn.init.zeros_(self.net[-1].bias)
 
